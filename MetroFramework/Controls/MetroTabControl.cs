@@ -175,6 +175,24 @@ namespace MetroFramework.Controls
             set { metroStyleManager = value; }
         }
 
+        private Color selectedItemForeColor = DefaultForeColor;
+        [Category(MetroDefaults.PropertyCategory.Appearance)]
+        [DefaultValue(MetroThemeStyle.Default)]
+        public Color ItemSelectedForeColor
+        {
+            get { return selectedItemForeColor; }
+            set { selectedItemForeColor = value; }
+        }
+
+        private Color deselectedItemForeColor = DefaultForeColor;
+        [Category(MetroDefaults.PropertyCategory.Appearance)]
+        [DefaultValue(MetroThemeStyle.Default)]
+        public Color ItemDeSelectedForeColor
+        {
+            get { return deselectedItemForeColor; }
+            set { deselectedItemForeColor = value; }
+        }
+
         private bool useCustomBackColor = false;
         [DefaultValue(false)]
         [Category(MetroDefaults.PropertyCategory.Appearance)]
@@ -451,7 +469,10 @@ namespace MetroFramework.Controls
             {
                 if (useCustomForeColor)
                 {
-                    foreColor = DefaultForeColor;
+                    if (selected)
+                        foreColor = ItemSelectedForeColor;
+                    else
+                        foreColor = ItemDeSelectedForeColor;
                 }
                 else
                 {
@@ -472,20 +493,8 @@ namespace MetroFramework.Controls
                 graphics.FillRectangle(bgBrush, bgRect);
             }
 
-            //THIS IS WHERE SHOULD I CHANGE
-            //MAKE IF ELSE TO CHECK WHICH INDEX THE USER IS LOCATED NOW
-            if (selected)
-            {
-                foreColor = MetroColors.GuardianBlueTheme;
-                TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
-                      tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
-            }
-            else
-            {
-                foreColor = MetroColors.GuardianGreyFont;
-                TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
-                      tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
-            }
+            TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
+                  tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
         }
 
         [SecuritySafeCritical]
