@@ -232,7 +232,7 @@ namespace MetroFramework.Controls
             get { return metroLabelSize; }
             set { metroLabelSize = value; }
         }
-
+        
         private MetroTabControlWeight metroLabelWeight = MetroTabControlWeight.Light;
         [DefaultValue(MetroTabControlWeight.Light)]
         [Category(MetroDefaults.PropertyCategory.Appearance)]
@@ -299,7 +299,9 @@ namespace MetroFramework.Controls
                      ControlStyles.OptimizedDoubleBuffer |
                      ControlStyles.SupportsTransparentBackColor, true);
 
-            Padding = new Point(6, 8);
+            ItemSize = new Size(107, 24);
+            SizeMode = TabSizeMode.Normal;
+            //Padding = new Point(0, 0);
             this.Selecting += MetroTabControl_Selecting;
         }
 
@@ -354,11 +356,32 @@ namespace MetroFramework.Controls
 
         protected virtual void OnPaintForeground(PaintEventArgs e)
         {
+
+            switch (Alignment)
+            {
+                case TabAlignment.Top:
+                    break;
+                case TabAlignment.Bottom:
+                    break;
+                case TabAlignment.Left:
+                    break;
+                case TabAlignment.Right:
+                    break;
+                default:
+                    break;
+            }
+
             for (var index = 0; index < TabPages.Count; index++)
             {
                 if (index != SelectedIndex)
                 {
-                    DrawTab(index, e.Graphics);
+                    DrawTab(index, e.Graphics, false);
+                }
+
+                //CUSTOM GUARDIAN COLOR
+                if(index == SelectedIndex)
+                {
+                    DrawTab(index, e.Graphics, true);
                 }
             }
             if (SelectedIndex <= -1)
@@ -367,7 +390,6 @@ namespace MetroFramework.Controls
             }
 
             DrawTabBottomBorder(SelectedIndex, e.Graphics);
-            DrawTab(SelectedIndex, e.Graphics);
             DrawTabSelected(SelectedIndex, e.Graphics);
 
             OnCustomPaintForeground(new MetroPaintEventArgs(Color.Empty, Color.Empty, e.Graphics));
@@ -377,7 +399,9 @@ namespace MetroFramework.Controls
         {
             using (Brush bgBrush = new SolidBrush(MetroPaint.BorderColor.TabControl.Normal(Theme)))
             {
-                Rectangle borderRectangle = new Rectangle(DisplayRectangle.X, GetTabRect(index).Bottom + 2 - TabBottomBorderHeight, DisplayRectangle.Width, TabBottomBorderHeight);
+                var tempBorderHeight = 1;
+                Rectangle borderRectangle = new Rectangle(DisplayRectangle.X, GetTabRect(index).Bottom + 2 - tempBorderHeight, DisplayRectangle.Width, tempBorderHeight);
+                //Rectangle borderRectangle = new Rectangle(DisplayRectangle.X, GetTabRect(index).Bottom + 2 - TabBottomBorderHeight, DisplayRectangle.Width, TabBottomBorderHeight);
                 graphics.FillRectangle(bgBrush, borderRectangle);
             }
         }
@@ -406,7 +430,7 @@ namespace MetroFramework.Controls
             return preferredSize;
         }
 
-        private void DrawTab(int index, Graphics graphics)
+        private void DrawTab(int index, Graphics graphics, bool selected)
         {
             Color foreColor;
             Color backColor = BackColor;
@@ -432,6 +456,7 @@ namespace MetroFramework.Controls
                 else
                 {
                     foreColor = !useStyleColors ? MetroPaint.ForeColor.TabControl.Normal(Theme) : MetroPaint.GetStyleColor(Style);
+                    //foreColor = Color.Red;
                 }
             }
 
@@ -442,15 +467,25 @@ namespace MetroFramework.Controls
 
             Rectangle bgRect = tabRect;
 
-            tabRect.Width += 20;
-
             using (Brush bgBrush = new SolidBrush(backColor))
             {
                 graphics.FillRectangle(bgBrush, bgRect);
             }
 
-            TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
-                                  tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
+            //THIS IS WHERE SHOULD I CHANGE
+            //MAKE IF ELSE TO CHECK WHICH INDEX THE USER IS LOCATED NOW
+            if (selected)
+            {
+                foreColor = MetroColors.GuardianBlueTheme;
+                TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
+                      tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
+            }
+            else
+            {
+                foreColor = MetroColors.GuardianGreyFont;
+                TextRenderer.DrawText(graphics, tabPage.Text, MetroFonts.TabControl(metroLabelSize, metroLabelWeight),
+                      tabRect, foreColor, backColor, MetroPaint.GetTextFormatFlags(TextAlign));
+            }
         }
 
         [SecuritySafeCritical]
@@ -769,7 +804,7 @@ namespace MetroFramework.Controls
 
                 tabDisable.Add(tabpage.Name);
                 Graphics e = this.CreateGraphics();
-                DrawTab(_tabid, e);
+                DrawTab(_tabid, e, false);
                 DrawTabBottomBorder(SelectedIndex, e);
                 DrawTabSelected(SelectedIndex, e);
             }
@@ -787,7 +822,7 @@ namespace MetroFramework.Controls
                 int _tabid = this.TabPages.IndexOf(tabpage);
 
                 Graphics e = this.CreateGraphics();
-                DrawTab(_tabid, e);
+                DrawTab(_tabid, e, false);
                 DrawTabBottomBorder(SelectedIndex, e);
                 DrawTabSelected(SelectedIndex, e);
             }

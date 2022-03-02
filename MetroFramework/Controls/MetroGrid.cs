@@ -210,6 +210,7 @@ namespace MetroFramework.Controls
             this.BackColor = MetroPaint.BackColor.Form(Theme);
             this.BackgroundColor = MetroPaint.BackColor.Form(Theme);
             this.GridColor = MetroPaint.BackColor.Form(Theme);
+
             this.ForeColor = MetroPaint.ForeColor.Button.Disabled(Theme);
             this.Font = new Font("Segoe UI", 11f, FontStyle.Regular, GraphicsUnit.Pixel);
 
@@ -226,6 +227,8 @@ namespace MetroFramework.Controls
 
             this.DefaultCellStyle.BackColor = MetroPaint.BackColor.Form(Theme);
 
+            //black-ish color
+            //is it the default color?
             this.DefaultCellStyle.SelectionBackColor = ControlPaint.Light(MetroPaint.GetStyleColor(Style), _offset);
             this.DefaultCellStyle.SelectionForeColor = Color.FromArgb(17, 17, 17);
 

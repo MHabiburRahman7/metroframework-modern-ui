@@ -55,7 +55,9 @@ namespace MetroFramework
         {
             get
             {
-                return Color.FromArgb(0, 174, 219);
+                //CUSTOM GUARDIAN COLOR
+                //return Color.FromArgb(0, 174, 219);
+                return Color.FromArgb(3, 88, 205);
             }
         }
 
@@ -138,6 +140,32 @@ namespace MetroFramework
                 return Color.FromArgb(255, 196, 37);
             }
         }
+
+        public static Color GuardianGridLine
+        {
+            get
+            {
+                return Color.FromArgb(230, 234, 244);
+            }
+        }
+
+        public static Color GuardianGreyFont
+        {
+            get
+            {
+                return Color.FromArgb(87, 100, 119);
+            }
+        }
+
+        public static Color GuardianBlueTheme
+        {
+            get
+            {
+                return Color.FromArgb(3, 88, 205);
+            }
+        }
+
+
 
         static Color _custom = Color.FromArgb(225, 195, 143);
 
